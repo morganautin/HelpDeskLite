@@ -44,8 +44,14 @@ class CreateTicketActivity : AppCompatActivity() {
         binding.saveTicket.isEnabled = false
         lifecycleScope.launch {
             try {
-                // TODO Exercise 4: Persist the prepared ticket and return to the catalogue on success.
-                binding.saveTicket.isEnabled = true
+                // Exercice 4 — Enregistrer le ticket via le repository de l'application
+                // (Room en temps normal, base en mémoire pendant les tests).
+                // add() est une fonction suspend : la ligne suivante ne s'exécute
+                // qu'une fois l'insertion terminée avec succès.
+                (application as HelpDeskApplication).tickets.add(ticket)
+                // Insertion réussie → on ferme le formulaire et on revient au catalogue.
+                // Le bouton reste désactivé : impossible d'enregistrer deux fois le même ticket.
+                finish()
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (_: Exception) {
